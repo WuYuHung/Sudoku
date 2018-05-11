@@ -28,6 +28,31 @@ int main()
 	return 0;
 }
 
+bool inCol(char a[N][N], int col, int num)
+{
+	for (int row = 0; row < N; row++)
+		if (a[row][col] == num)
+			return true;
+	return false;
+}
+
+bool inRow(char a[N][N], int row, int num)
+{
+	for (int col = 0; col < N; col++)
+		if (a[row][col] == num)
+			return true;
+	return false;
+}
+
+bool inBox(char a[N][N], int boxStartRow, int boxStartCol, int num)
+{
+	for (int row = 0; row < 3; row++)
+		for (int col = 0; col < 3; col++)
+			if (a[row + boxStartRow][col + boxStartCol] == num)
+				return true;
+	return false;
+}
+
 // ¦L¥X¯x°}
 void print(char a[N][N])
 {
