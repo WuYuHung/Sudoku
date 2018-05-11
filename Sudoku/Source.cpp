@@ -5,13 +5,23 @@
 // Problem statement: Sudoku
 
 #include <iostream>
-#include<fstream>
+#include <fstream>
 #define N 9
 
+using namespace std;
+
+// prototypes
+void print(char a[N][N]);
+bool inCol(char a[N][N], int col, int num);
+bool inRow(char a[N][N], int row, int num);
+bool inBox(char a[N][N], int boxStartRow, int boxStartCol, int num);
+bool trueInput(char a[N][N]);
+bool isFinished(char a[N][N], int &row, int &col);
+bool SolveSudoku(char a[N][N]);
+bool isSafe(char a[N][N], int row, int col, int num);
 
 const std::string FILE_NAME = "Question.txt";
 
-void print(char a[N][N]);
 char a[N][N] = { 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n',
@@ -21,9 +31,18 @@ char a[N][N] = { 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n' };
+
 int main()
 {
-	print(a);
+	/*ÅªÀÉ*/
+	if (trueInput(a))
+		print(a);
+	else
+		printf("%s" , "No Solution");
+	if (SolveSudoku(a))
+		print(a);
+	else
+		printf("%s", "No Solution");
 	system("pause");
 	return 0;
 }
@@ -53,7 +72,6 @@ bool inBox(char a[N][N], int boxStartRow, int boxStartCol, int num)
 	return false;
 }
 
-// ¦L¥X¯x°}
 void print(char a[N][N])
 {
 	for (int i = 0; i < N; i++)
