@@ -5,7 +5,9 @@
 // Problem statement: Sudoku
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
+#include <time.h> 
 #define N 9
 
 using namespace std;
@@ -15,12 +17,12 @@ void print(char a[N][N]);
 bool inCol(char a[N][N], int col, int num);
 bool inRow(char a[N][N], int row, int num);
 bool inBox(char a[N][N], int boxStartRow, int boxStartCol, int num);
-bool trueInput(char a[N][N]);
+bool available(char a[N][N]);
 bool isFinished(char a[N][N], int &row, int &col);
 bool SolveSudoku(char a[N][N]);
 bool isSafe(char a[N][N], int row, int col, int num);
 
-const std::string FILE_NAME = "Question.txt";
+const std::string FILE_NAME = "Question (1).txt";
 
 char a[N][N] = { 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n',
@@ -38,31 +40,40 @@ int main()
 	file.open(FILE_NAME);
 	int i = 0, j = 0;
 	char input;
+	int tmp = 0;
 	while (file >> input) {
 		a[i][j++] = input;
 		if (j == 9)
 			j = 0, i++;
+		if (i == 9 && j == 0) {
+			clock_t tStart = clock();
+			if (SolveSudoku(a) && available(a))
+				print(a);
+			else
+				printf("%s", "No Solution\n");
+			std::cout << "Time taken:" << (double)(clock() - tStart) / CLOCKS_PER_SEC << std::endl;
+			i = 0, j = 0;
+		}
 	}
-	print(a);
-	if (!trueInput(a))
-		printf("%s" , "No Solution");
-	if (SolveSudoku(a))
-		print(a);
-	else
-		printf("%s", "No Solution");
 	system("pause");
 	return 0;
 }
 
-bool trueInput(char a[N][N])
+bool available(char a[N][N])
 {
+	for (int i = 1; i <= 9; i++) {
+		for (int m = 0; m < 9; m++) {
+			if (!inCol(a, m, i) || !inRow(a, m, i))
+				return false;
+		}
+	}
 	return true;
 }
 
 bool inCol(char a[N][N], int col, int num)
 {
 	for (int row = 0; row < N; row++)
-		if (a[row][col] == num)
+		if (a[row][col] == num + 48)
 			return true;
 	return false;
 }
@@ -70,7 +81,7 @@ bool inCol(char a[N][N], int col, int num)
 bool inRow(char a[N][N], int row, int num)
 {
 	for (int col = 0; col < N; col++)
-		if (a[row][col] == num)
+		if (a[row][col] == num + 48)
 			return true;
 	return false;
 }
@@ -79,7 +90,7 @@ bool inBox(char a[N][N], int boxStartRow, int boxStartCol, int num)
 {
 	for (int row = 0; row < 3; row++)
 		for (int col = 0; col < 3; col++)
-			if (a[row + boxStartRow][col + boxStartCol] == num)
+			if (a[row + boxStartRow][col + boxStartCol] == num + 48)
 				return true;
 	return false;
 }
@@ -128,39 +139,6 @@ bool isFinished(char a[N][N], int &row, int &col)
 			}
 		}
 	}
-
-/*	for (int x = 0; x < row; x++) {
-		for (int y = 0; y < col; y++) {
-			check[a[x][y] - 30]--;
-			if (check[a[x][y] - 30] < 0) {
-				return false;
-			}
-		}
-	}
-
-	check[9] = {};
-	for (int y = 0; y < row; y++) {
-		for (int x = 0; x < col; x++) {
-			check[a[x][y] - 30]--;
-			if (check[a[x][y] - 30] < 0) {
-				return false;
-			}
-		}
-	}
-
-	check[9] = {};
-	for (int b = 0; b < 3; b++) {
-		for (int c = 0; c < 3; c++) {
-			for (int d = 3 * b; d < 3 * b + 3; d++) {
-				for (int e = 3 * c; e < 3 * c + 3; e++) {
-					check[a[d][e] - 30]--;
-					if (check[a[d][e] - 30] < 0) {
-						return false;
-					}
-				}
-			}
-		}
-	}*/
 	return true;
 }
 
@@ -176,7 +154,9 @@ bool SolveSudoku(char a[N][N])
 		if (isSafe(a, row, col, num))
 		{
 			char temp;
-			temp = (char)num;
+			temp = num + 48;
+			/*printf("%d\n", temp);
+			system("pause");*/
 			a[row][col] = temp;
 			if (SolveSudoku(a))
 			{
