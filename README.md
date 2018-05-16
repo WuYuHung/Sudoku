@@ -6,9 +6,9 @@ Time taken (approximately):
 
 Question
 
-'''
+```
 0.038
-'''
+```
 
 Question (1)
 
