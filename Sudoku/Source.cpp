@@ -22,7 +22,7 @@ bool isFinished(char a[N][N], int &row, int &col);
 bool SolveSudoku(char a[N][N]);
 bool isSafe(char a[N][N], int row, int col, int num);
 
-const std::string FILE_NAME = "Question (1).txt";
+const std::string FILE_NAME = "Question.txt";
 
 char a[N][N] = { 'n','n','n','n','n','n','n','n','n',
 'n','n','n','n','n','n','n','n','n',
@@ -46,12 +46,10 @@ int main()
 		if (j == 9)
 			j = 0, i++;
 		if (i == 9 && j == 0) {
-			clock_t tStart = clock();
 			if (SolveSudoku(a) && available(a))
 				print(a);
 			else
 				printf("%s", "No Solution\n");
-			std::cout << "Time taken:" << (double)(clock() - tStart) / CLOCKS_PER_SEC << std::endl;
 			i = 0, j = 0;
 		}
 	}
@@ -155,8 +153,6 @@ bool SolveSudoku(char a[N][N])
 		{
 			char temp;
 			temp = num + 48;
-			/*printf("%d\n", temp);
-			system("pause");*/
 			a[row][col] = temp;
 			if (SolveSudoku(a))
 			{
